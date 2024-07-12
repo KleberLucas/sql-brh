@@ -45,3 +45,27 @@ END;
 VARIABLE g_IDADE INTEGER;
 EXECUTE :g_IDADE:=brh.calcula_idade('01/02/1987');
 print g_IDADE;
+
+
+
+--Tarefa
+--Crie a function brh.finaliza_projeto para registrar o término da execução de um projeto:
+--Parâmetros da function:
+--ID do projeto: number com identificador do projeto a ser finalizado.
+--Retorno da function:
+--Deve retornar a data de finalização atribuída ao projeto.
+--Adicione o código no arquivo sql/plsql.sql;
+--Faça commit do arquivo.
+
+SELECT * FROM brh.projeto;
+
+CREATE OR REPLACE FUNCTION brh.finaliza_projeto
+(p_ID IN brh.projeto.ID%type)
+RETURN DATE
+IS 
+v_DATA_FINAL DATE;
+BEGIN
+    v_DATA_FINAL := SYSDATE;
+    UPDATE brh.projeto SET FIM = v_DATA_FINAL WHERE ID = p_ID;
+    RETURN v_DATA_FINAL;
+END;
