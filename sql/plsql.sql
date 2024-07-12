@@ -69,3 +69,37 @@ BEGIN
     UPDATE brh.projeto SET FIM = v_DATA_FINAL WHERE ID = p_ID;
     RETURN v_DATA_FINAL;
 END;
+
+
+
+
+--Tarefa
+--Altere a procedure brh.insere_projeto para não permitir cadastrar projetos inválidos;
+--Adicione o código no arquivo sql/plsql.sql;
+--Faça commit do arquivo.
+--Critérios de aceitação
+--O nome do novo do projeto deve ter duas ou mais letras:
+--Se tiver menos caracteres, ou for null, lance uma exceção com a mensagem "Nome de projeto inválido! Deve ter dois ou mais caracteres.".
+
+SELECT * FROM brh.projeto;
+
+CREATE OR REPLACE PROCEDURE brh.insere_projeto
+(
+    p_NOME IN brh.projeto.nome%type,
+    p_RESPONSAVEL IN brh.projeto.responsavel%type   
+)
+
+IS
+
+BEGIN
+    IF LENGTH(p_NOME) < 2 OR p_NOME = NULL THEN
+        RAISE_APPLICATION_ERROR(-20001, '"Nome de projeto inválido! Deve ter dois ou mais caracteres.".');
+    END IF;
+    
+    INSERT INTO brh.projeto (NOME, RESPONSAVEL, INICIO) VALUES (p_NOME, UPPER(p_RESPONSAVEL), SYSDATE);
+    
+    COMMIT; --NECESSARIO NO PL SQL
+
+END;
+
+EXECUTE brh.insere_projeto('S', 'G123');
